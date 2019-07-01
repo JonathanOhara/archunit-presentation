@@ -1,0 +1,33 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.6.RELEASE'
+	id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'edu.jonathan'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+test {
+	useJUnitPlatform()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	runtimeOnly 'com.h2database:h2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
+
+	compile group: 'com.tngtech.archunit', name: 'archunit', version: '0.10.2'
+	compile group: 'com.tngtech.archunit', name: 'archunit-junit5-api', version: '0.10.2'
+	compile group: 'com.tngtech.archunit', name: 'archunit-junit5-engine', version: '0.10.2'
+}

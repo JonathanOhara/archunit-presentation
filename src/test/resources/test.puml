@@ -1,0 +1,21 @@
+@startuml
+
+skinparam componentStyle uml2
+skinparam component {
+  BorderColor #grey
+  BackgroundColor #white
+}
+
+
+[Controller] <<..controller..>>
+[Service] <<..service..>>
+[Repository] <<..repository..>>
+[Domain] <<..domain..>>
+
+
+[Controller] -->  [Service]
+[Service] -->  [Repository]
+[Service] --> [Domain]
+[Repository] --> [Domain]
+
+@enduml
