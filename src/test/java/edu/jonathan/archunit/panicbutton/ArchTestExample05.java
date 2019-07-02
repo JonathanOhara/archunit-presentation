@@ -5,9 +5,10 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
-import com.tngtech.archunit.library.GeneralCodingRules;
 import edu.jonathan.archunit.Application;
+import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 
@@ -15,7 +16,14 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 public class ArchTestExample05 {
 
     @ArchTest
-    static ArchRule test = noClasses().should(GeneralCodingRules.THROW_GENERIC_EXCEPTIONS);
+    static ArchRule autoWireRule = fields().should().notBeAnnotatedWith(Autowired.class).because("Use Constructor");
 
+
+    @ArchTest
+    static void useInjection(JavaClasses classes){
+        methods().should().notBeAnnotatedWith(Autowired.class).because("Use @injection 1").check(classes);
+        fields().should().notBeAnnotatedWith(Autowired.class).because("Use @injection 2").check(classes);
+
+    }
 
 }
