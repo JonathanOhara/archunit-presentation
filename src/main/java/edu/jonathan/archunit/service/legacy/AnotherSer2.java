@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class AnotherSer2  {
 
-    public void call(){
-        new AnotherSer().call();
+    public void createFork(){
+        new AnotherSer().createSpoon();
     }
 
 }

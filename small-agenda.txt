@@ -1,0 +1,95 @@
+1
+
+Mostrar O projeto
+Mostrar dependencias
+Mostrar Junit5
+
+new ClassFileImporter().importPackagesOf(Application.class);
+
+2
+
+ArchRuleDefinition.classes().that().resideInAnyPackage("..service..").
+should().beAnnotatedWith(Service.class).because("I want that!"
+
+withImportOption(location -> !location.contains("/test/")).
+
+classes().that().resideInAnyPackage("..service..").
+should().haveNameMatching(".*Service");
+				
+3
+
+classes().that().resideInAPackage("..service..").
+should().onlyBeAccessed().byAnyPackage("..controller..", "..service..");
+
+4
+
+@AnalyzeClasses(packagesOf = Application.class,importOptions = ImportOption.DoNotIncludeTests.class)
+
+
+@ArchTest
+static ArchRule shouldHaveServiceAnnotationAllServiceClasses = 
+classes().that().resideInAnyPackage("..service..").
+should().beAnnotatedWith(Service.class).because("I want that!");
+
+5
+
+AutoWire Rule
+
+methods().should().notBeAnnotatedWith(Autowired.class).because("Use @injection 1").check(classes);
+
+6
+
+layeredArchitecture()
+	.layer("Controller").definedBy("..controller..")
+	.layer("Service").definedBy("..service..")
+	.layer("Repo").definedBy("..repository..")
+
+	.whereLayer("Controller").mayNotBeAccessedByAnyLayer()
+	.whereLayer("Service").mayOnlyBeAccessedByLayers("Controller")
+	.whereLayer("Repo").mayOnlyBeAccessedByLayers("Service").
+
+	check(classes);
+
+7
+
+GeneralCodingRules.THROW_GENERIC_EXCEPTIONS
+
+8
+
+
+ArchCondition<JavaClass> HAVE_TABLE_NAME = new ArchCondition<JavaClass>("should have name set") {
+	@Override
+	public void check(JavaClass item, ConditionEvents events) {
+		Entity entity = item.getAnnotationOfType(Entity.class);
+
+		if(entity.name() == null || entity.name().isEmpty())
+			events.add(SimpleConditionEvent.violated(item, "you need to set the name of table in "+item.getFullName()));
+	}
+};
+
+
+
+IDEIA chamar alguem pra fazer uma condicao
+
+
+
+@ArchTest
+ArchRule rule = classes().that().areAnnotatedWith(Entity.class).should(HAVE_TABLE_NAME);
+	
+9
+
+@ArchTest
+static void module(JavaClasses classes){
+	SliceRule sliceRule2 = SlicesRuleDefinition.slices().matching("..archunit.(*)..").should().beFreeOfCycles();
+
+	sliceRule2.check(classes);
+}
+
+10
+
+Mostrar test.puml
+
+static URL diagramURL = ApplicationTests.class.getClassLoader().getResource("test.puml");
+
+@ArchTest
+ArchRule rule = classes().should(PlantUmlArchCondition.adhereToPlantUmlDiagram(diagramURL, PlantUmlArchCondition.Configurations.consideringOnlyDependenciesInDiagram()));

@@ -9,7 +9,7 @@ public class SomeUtil {
     }
 
 
-    public static PersonService makeJewelFromNiobium(long firstNumber, long secondNumber){
+    public static PersonService makeJewelFromNiobium(double price){
         return new PersonService();
     }
 }
