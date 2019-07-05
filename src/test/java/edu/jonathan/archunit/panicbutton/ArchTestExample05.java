@@ -18,7 +18,6 @@ public class ArchTestExample05 {
     @ArchTest
     static ArchRule autoWireRule = fields().should().notBeAnnotatedWith(Autowired.class).because("Use Constructor");
 
-
     @ArchTest
     static void useInjection(JavaClasses classes){
         methods().should().notBeAnnotatedWith(Autowired.class).because("Use @injection 1").check(classes);

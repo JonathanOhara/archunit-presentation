@@ -1,45 +1,55 @@
-1
+0 *********************************************************************************************
 
 Mostrar O projeto
 Mostrar dependencias
 Mostrar Junit5
 
+1 *********************************************************************************************
+
 new ClassFileImporter().importPackagesOf(Application.class);
 
-2
+JavaClass personController = mainPackage.get(PersonController.class);
+System.out.println(personController.getMethodCallsFromSelf().size());
+
+2 *********************************************************************************************
 
 ArchRuleDefinition.classes().that().resideInAnyPackage("..service..").
-should().beAnnotatedWith(Service.class).because("I want that!"
+should().beAnnotatedWith(Service.class).because("I want that!");
+
+-------
+
+ArchRuleDefinition.classes().that().resideInAnyPackage("..service..").
+should().haveNameMatching(".*Service");
+
+--------
 
 withImportOption(location -> !location.contains("/test/")).
 
-classes().that().resideInAnyPackage("..service..").
-should().haveNameMatching(".*Service");
-				
-3
 
-classes().that().resideInAPackage("..service..").
+3 *********************************************************************************************
+
+ArchRuleDefinition.classes().that().resideInAPackage("..service..").
 should().onlyBeAccessed().byAnyPackage("..controller..", "..service..");
 
-4
+4 *********************************************************************************************
 
 @AnalyzeClasses(packagesOf = Application.class,importOptions = ImportOption.DoNotIncludeTests.class)
 
 
 @ArchTest
 static ArchRule shouldHaveServiceAnnotationAllServiceClasses = 
-classes().that().resideInAnyPackage("..service..").
+ArchRuleDefinition.classes().that().resideInAnyPackage("..service..").
 should().beAnnotatedWith(Service.class).because("I want that!");
 
-5
+5 *********************************************************************************************
 
 AutoWire Rule
 
-methods().should().notBeAnnotatedWith(Autowired.class).because("Use @injection 1").check(classes);
+ArchRuleDefinition.methods().should().notBeAnnotatedWith(Autowired.class).because("Use @injection 1").check(classes);
 
-6
+6 *********************************************************************************************
 
-layeredArchitecture()
+Architectures.layeredArchitecture()
 	.layer("Controller").definedBy("..controller..")
 	.layer("Service").definedBy("..service..")
 	.layer("Repo").definedBy("..repository..")
@@ -50,11 +60,11 @@ layeredArchitecture()
 
 	check(classes);
 
-7
+7 *********************************************************************************************
 
-GeneralCodingRules.THROW_GENERIC_EXCEPTIONS
+ArchRuleDefinition.noClasses().should(GeneralCodingRules.THROW_GENERIC_EXCEPTIONS);
 
-8
+8 *********************************************************************************************
 
 
 ArchCondition<JavaClass> HAVE_TABLE_NAME = new ArchCondition<JavaClass>("should have name set") {
@@ -67,16 +77,10 @@ ArchCondition<JavaClass> HAVE_TABLE_NAME = new ArchCondition<JavaClass>("should 
 	}
 };
 
-
-
-IDEIA chamar alguem pra fazer uma condicao
-
-
-
 @ArchTest
-ArchRule rule = classes().that().areAnnotatedWith(Entity.class).should(HAVE_TABLE_NAME);
+ArchRule rule = ArchRuleDefinition.classes().that().areAnnotatedWith(Entity.class).should(HAVE_TABLE_NAME);
 	
-9
+9 *********************************************************************************************
 
 @ArchTest
 static void module(JavaClasses classes){
@@ -85,11 +89,11 @@ static void module(JavaClasses classes){
 	sliceRule2.check(classes);
 }
 
-10
+10 *********************************************************************************************
 
 Mostrar test.puml
 
 static URL diagramURL = ApplicationTests.class.getClassLoader().getResource("test.puml");
 
 @ArchTest
-ArchRule rule = classes().should(PlantUmlArchCondition.adhereToPlantUmlDiagram(diagramURL, PlantUmlArchCondition.Configurations.consideringOnlyDependenciesInDiagram()));
+ArchRule rule = ArchRuleDefinition.classes().should(PlantUmlArchCondition.adhereToPlantUmlDiagram(diagramURL, PlantUmlArchCondition.Configurations.consideringOnlyDependenciesInDiagram()));

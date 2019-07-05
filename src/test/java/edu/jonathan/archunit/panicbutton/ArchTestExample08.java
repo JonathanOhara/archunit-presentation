@@ -31,8 +31,6 @@ public class ArchTestExample08 {
     };
 
 
-
-
     @ArchTest
     ArchRule rule = classes().that().areAnnotatedWith(Entity.class).should(HAVE_TABLE_NAME);
 
